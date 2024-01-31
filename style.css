@@ -1,0 +1,22 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+
+h1 {
+    text-align: center;
+}
+
+.remove {
+    float: right;
+}
+
+form {
+    display: flex;
+    flex-flow: row;
+}
+
+.idNumber {
+    display: none;
+}
