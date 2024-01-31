@@ -12,17 +12,32 @@ $(document).ready(function() {
                 // Store the ids in an array which are hidden in the DOM, so that we can retrieve that id later when a remove button is clicked. I'm sure there's a better way to do this but this is the first thing I could think of
                 var id = taskArray[i].id;
                 ids.push(id);
-                $('tbody').append(
-                    '<tr>' +
-                        '<td>' +
-                            '<div class="form-check">' +
-                                '<input class="form-check-input" type="checkbox" value="">' + taskArray[i].content +
-                                '<span class="idNumber">' + id + '</span>' +
-                                '<button class="btn btn-danger btn-sm remove">X</button>' +
-                            '</div>' +
-                        '</td>' +
-                    '</tr>'
-                )
+                if (taskArray[i].completed == false) {
+                    $('tbody').append(
+                        '<tr>' +
+                            '<td>' +
+                                '<div class="form-check">' +
+                                    '<input class="form-check-input" type="checkbox" value=""><span>' + taskArray[i].content +
+                                    '</span><span class="idNumber">' + id + '</span>' +
+                                    '<button class="btn btn-danger btn-sm remove">X</button>' +
+                                '</div>' +
+                            '</td>' +
+                        '</tr>'
+                    )
+                } else {
+                    $('tbody').append(
+                        '<tr>' +
+                            '<td>' +
+                                '<div class="form-check">' +
+                                    '<input class="form-check-input" type="checkbox" value="" checked><span class="strikethrough">' + taskArray[i].content +
+                                    '</span><span class="idNumber">' + id + '</span>' +
+                                    '<button class="btn btn-danger btn-sm remove">X</button>' +
+                                '</div>' +
+                            '</td>' +
+                        '</tr>'
+                    )
+                }
+                
             }
         },
         error: function (request, textStatus, errorMessage) {
@@ -48,8 +63,8 @@ $(document).ready(function() {
                     '<tr>' +
                         '<td>' +
                             '<div class="form-check">' +
-                                '<input class="form-check-input" type="checkbox" value="">' + response.task.content +
-                                '<span class="idNumber">' + response.task.id + '</span>' +
+                                '<input class="form-check-input" type="checkbox" value=""><span>' + response.task.content +
+                                '</span><span class="idNumber">' + response.task.id + '</span>' +
                                 '<button class="btn btn-danger btn-sm remove">X</button>' +
                             '</div>' +
                         '</td>' +
@@ -77,7 +92,6 @@ $(document).ready(function() {
                 console.log(errorMessage);
             }
         });
-
     })
 
     // Mark a task as completed
@@ -86,12 +100,28 @@ $(document).ready(function() {
         if (this.checked) {
             $.ajax({
                 type: 'PUT',
-                url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '?api_key=1158',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({})
-            })
-        }
+                url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '/mark_complete?api_key=1158',
+                success: function (response, textStatus) {
+                    console.log(response);
+                    $('span:contains(' + id + ')').prev().toggleClass('strikethrough');
+                },
+                error: function (request, textStatus, errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        } else {
+            $.ajax({
+                type: 'PUT',
+                url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '/mark_active?api_key=1158',
+                success: function (response, textStatus) {
+                    console.log(response);
+                    $('span:contains(' + id + ')').prev().toggleClass('strikethrough');
+                },
+                error: function (request, textStatus, errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        }        
     })
 })
 

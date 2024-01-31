@@ -20,3 +20,7 @@ form {
 .idNumber {
     display: none;
 }
+
+.strikethrough {
+    text-decoration: line-through;
+}
