@@ -1,6 +1,11 @@
+html {
+    min-height: 100%;
+}
+
 body {
     font-family: Roboto;
-    background-color: aquamarine;
+    background: radial-gradient(rgba(0, 247, 255, 0.25), rgb(0, 247, 255));
+    background-size: auto;
 }
 
 .container {
@@ -10,9 +15,8 @@ body {
     background-color: white;
     box-shadow: 10px 10px 8px rgb(50, 50, 50);
     padding: 25px;
-    margin-top: 25px;
+    margin-top: 50px;
 }
-
 
 h1 {
     text-align: center;
