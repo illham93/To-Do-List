@@ -17,7 +17,7 @@ $(document).ready(function() {
                         '<tr>' +
                             '<td>' +
                                 '<div class="form-check">' +
-                                    '<input class="form-check-input" type="checkbox" value=""><span>' + taskArray[i].content +
+                                    '<input class="form-check-input complete" type="checkbox" value=""><span>' + taskArray[i].content +
                                     '</span><span class="idNumber">' + id + '</span>' +
                                     '<button class="btn btn-danger btn-sm remove">X</button>' +
                                 '</div>' +
@@ -29,7 +29,7 @@ $(document).ready(function() {
                         '<tr>' +
                             '<td>' +
                                 '<div class="form-check">' +
-                                    '<input class="form-check-input" type="checkbox" value="" checked><span class="strikethrough">' + taskArray[i].content +
+                                    '<input class="form-check-input complete" type="checkbox" value="" checked><span class="strikethrough">' + taskArray[i].content +
                                     '</span><span class="idNumber">' + id + '</span>' +
                                     '<button class="btn btn-danger btn-sm remove">X</button>' +
                                 '</div>' +
@@ -63,13 +63,14 @@ $(document).ready(function() {
                     '<tr>' +
                         '<td>' +
                             '<div class="form-check">' +
-                                '<input class="form-check-input" type="checkbox" value=""><span>' + response.task.content +
+                                '<input class="form-check-input complete" type="checkbox" value=""><span>' + response.task.content +
                                 '</span><span class="idNumber">' + response.task.id + '</span>' +
                                 '<button class="btn btn-danger btn-sm remove">X</button>' +
                             '</div>' +
                         '</td>' +
                     '</tr>'
                 )
+                $('#taskName').val('');
             },
             error: function (request, textStatus, errorMessage) {
                 console.log(errorMessage);
@@ -95,7 +96,7 @@ $(document).ready(function() {
     })
 
     // Mark a task as completed
-    $(document).on('change', '.form-check-input', function() {
+    $(document).on('change', '.complete', function() {
         var id = $(this).siblings('.idNumber').html();
         if (this.checked) {
             $.ajax({
@@ -122,6 +123,47 @@ $(document).ready(function() {
                 }
             });
         }        
+    })
+
+    // Click show all tasks
+    $('#showAll').on('click', function() {
+        $('#showAll').prop('checked', true);
+        $('#showActive').prop('checked', false);
+        $('#showCompleted').prop('checked', false);
+
+        $('tr').each(function (i, e) {
+            $(this).removeClass('hidden');
+        })
+    })
+
+    // Click show active tasks
+    $('#showActive').on('click', function() {
+        $('#showAll').prop('checked', false);
+        $('#showActive').prop('checked', true);
+        $('#showCompleted').prop('checked', false);
+
+        $('tr').each(function (i, e) {
+            if ($(this).find('span').hasClass('strikethrough')) {
+                $(this).addClass('hidden');
+            } else {
+                $(this).removeClass('hidden');
+            }
+        })
+    })
+
+    // Click show completed tasks
+    $('#showCompleted').on('click', function() {
+        $('#showAll').prop('checked', false);
+        $('#showActive').prop('checked', false);
+        $('#showCompleted').prop('checked', true);
+
+        $('tr').each(function (i, e) {
+            if ($(this).find('span').hasClass('strikethrough')) {
+                $(this).removeClass('hidden');
+            } else {
+                $(this).addClass('hidden');
+            }
+        })
     })
 })
 
